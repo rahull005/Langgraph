@@ -1,5 +1,5 @@
 import streamlit as st
-from chatbot_backend import chatbot
+from chatbot_backend import chatbot # type: ignore
 from langchain_core.messages import HumanMessage
 
 # st.session_state -> dict -> 
