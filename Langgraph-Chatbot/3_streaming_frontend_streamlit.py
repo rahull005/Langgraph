@@ -10,17 +10,20 @@ for message in st.session_state["messages_history"]:  #dict(message_history : [{
     with st.chat_message(message['role']):
         st.text(message['content'])
 
-# [
-#     {
-#         "role": "user",
-#         "content": "What is LangGraph?"
-#     },
-#     {
-#         "role": "assistant",
-#         "content": "LangGraph is a framework for building stateful agent workflows."
-#     }
-# ]
+"""
 
+    [
+        {
+            "role": "user",
+            "content": "What is LangGraph?"
+        },
+        {
+            "role": "assistant",
+            "content": "LangGraph is a framework for building stateful agent workflows."
+        }
+    ]
+
+"""
 
 
 user_input = st.chat_input("type here")
