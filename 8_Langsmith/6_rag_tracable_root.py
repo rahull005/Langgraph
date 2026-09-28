@@ -15,7 +15,7 @@ from langchain_core.output_parsers import StrOutputParser
 
 load_dotenv()
 
-PDF_PATH = "islr.pdf"  # <- change to your file
+PDF_PATH = "8_Langsmith\islr.pdf"  # <- change to your file
 
 # ----------------- helpers (not traced individually) -----------------
 @traceable(name="load_pdf")
@@ -33,8 +33,8 @@ def split_documents(docs, chunk_size=1000, chunk_overlap=150):
 @traceable(name="build_vectorstore")
 def build_vectorstore(splits):
     embeddings = HuggingFaceEmbeddings(
-            model="sentence-transformers/all-MiniLM-L6-v2"
-        )
+                model="sentence-transformers/all-MiniLM-L6-v2"
+            )
     return FAISS.from_documents(splits, embeddings)
 
 # ----------------- parent setup function (traced) -----------------
@@ -47,7 +47,6 @@ def setup_pipeline(pdf_path: str, chunk_size=1000, chunk_overlap=150):
     return vs
 
 # ----------------- model, prompt, and run -----------------
-
 llm = HuggingFaceEndpoint(
     repo_id="Qwen/Qwen2.5-72B-Instruct",
     task="conversational"
@@ -62,6 +61,9 @@ prompt = ChatPromptTemplate.from_messages([
 
 def format_docs(docs):
     return "\n\n".join(d.page_content for d in docs)
+
+
+
 
 # ----------------- one top-level (root) run -----------------
 @traceable(name="pdf_rag_full_run")
