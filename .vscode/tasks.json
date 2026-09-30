@@ -1,0 +1,18 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run Tool Calling Streamlit",
+			"type": "shell",
+			"command": ".\\myenv\\Scripts\\python.exe",
+			"args": [
+				"-m",
+				"streamlit",
+				"run",
+				"10_Tool_Calling/streamlit_frontend tool_2.py"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		}
+	]
+}
