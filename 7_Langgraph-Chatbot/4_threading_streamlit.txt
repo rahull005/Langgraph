@@ -1,4 +1,4 @@
--> add a sidebar with title + A Start Chat Button + a title named 'My Conversations' [Done]
+-> add a sidebar with title + A Start Chat Button + a title named 'My Conversations'
 
 -> generate dynamic thread id and add it to the session 
 
