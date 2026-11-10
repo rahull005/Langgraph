@@ -3,14 +3,13 @@
 from langgraph.graph import StateGraph, START
 from typing import TypedDict, Annotated
 from langchain_core.messages import BaseMessage, HumanMessage
-from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode, tools_condition
 from langchain_core.tools import tool
 from langgraph.types import interrupt, Command
 from dotenv import load_dotenv
-import requests
 import os
 
 load_dotenv()
@@ -18,34 +17,27 @@ load_dotenv()
 # -------------------
 # 1. LLM
 # -------------------
-HUGGINGFACE_TOKEN = (os.getenv("HUGGINGFACEHUB_ACCESS_TOKEN"))
-if not HUGGINGFACE_TOKEN:
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+if not GOOGLE_API_KEY:
     raise RuntimeError(
-        "Set HUGGINGFACEHUB_API_TOKEN in your environment or .env file."
+        "Set GOOGLE_API_KEY in your environment or .env file."
     )
 
-model = HuggingFaceEndpoint(
-    repo_id="meta-llama/Llama-3.1-8B-Instruct",
-    task="text-generation",
-    huggingfacehub_api_token=HUGGINGFACE_TOKEN,
-    temperature=0.7,
+llm = ChatGoogleGenerativeAI(
+    model="gemini-3.6-flash",
+    google_api_key=GOOGLE_API_KEY,
 )
-llm = ChatHuggingFace(llm=model)
 # -------------------
 # 2. Tools
 # -------------------
 @tool
 def get_stock_price(symbol: str) -> dict:
-    """
-    Fetch latest stock price for a given symbol (e.g. 'AAPL', 'TSLA') 
-    using Alpha Vantage with API key in the URL.
-    """
-    url = (
-        "https://www.alphavantage.co/query"
-        f"?function=GLOBAL_QUOTE&symbol={symbol}&apikey=C9PE94QUEW9VWGFM"
-    )
-    r = requests.get(url)
-    return r.json()
+    """Return a simulated stock price without calling an external service."""
+    return {
+        "symbol": symbol,
+        "price": 100.00,
+        "source": "simulated",
+    }
 
 
 @tool
@@ -157,4 +149,4 @@ if __name__ == "__main__":
         # Get the latest message from the assistant
         messages = result["messages"]
         last_msg = messages[-1]
-        print(f"Bot: {last_msg.content}\n")
+        print(f"Bot: {last_msg.text}\n")
